@@ -63,6 +63,6 @@ node seed2.js
 npm start
 ```
 7. Открыть приложение в браузере
-```text
+```
 http://localhost:8080
 ```
