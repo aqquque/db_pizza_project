@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 
@@ -31,10 +32,8 @@ const swaggerOptions = {
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Test route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Pizza Delivery API!" });
-});
+// Раздача статических файлов (фронтенд) - ДОЛЖНА БЫТЬ ДО ДРУГИХ МАРШРУТОВ
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Database sync
 const db = require("./models");
@@ -54,8 +53,14 @@ require("./routes/address.routes")(app);
 require("./routes/courier.routes")(app);
 require("./routes/order.routes")(app);
 
+// Fallback для SPA (если маршрут не найден, отдаём index.html)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📚 Swagger docs: http://localhost:${PORT}/api-docs`);
+  console.log(`🍕 Frontend: http://localhost:${PORT}`);
 });
