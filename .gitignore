@@ -1,0 +1,78 @@
+# Зависимости Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Переменные окружения (секреты)
+.env
+.env.local
+.env.*.local
+
+# Логи
+*.log
+logs/
+log/
+
+# Файлы IDE и редакторов
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ОС
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.dll
+
+# Временные файлы Node.js
+.cache/
+.tmp/
+.temp/
+
+# Отчеты о покрытии кода
+coverage/
+.nyc_output/
+
+# Сборки и дистрибутивы
+dist/
+build/
+*.tgz
+
+# Файлы базы данных 
+*.sqlite
+*.db
+*.pgsql
+
+# Swagger 
+swagger.json
+swagger.yaml
+
+# Файлы сессий
+.session
+.secret
+
+# Файлы логов Sequelize
+.sqlite-journal
+
+# Резервные копии
+*.bak
+*.backup
+*.old
+
+# Файлы отладки
+debug.log
+trace.log
+
+# Файлы, созданные seed.js при ошибках
+*.error.log
