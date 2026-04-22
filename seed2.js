@@ -123,6 +123,20 @@ async function seed() {
       { orderId: orderMap['ORD-004'], pizzaId: pizzaMap['Мясная'], quantity: 1, priceAtOrder: 700 }
     ]);
     console.log('✅ Order items added');
+    
+    const couriersList = await db.Courier.findAll();
+const courierUsers = couriersList.map(courier => ({
+  username: `courier_${courier.id}`,
+  password: '123456', // В реальном проекте хешируйте!
+  role: 'courier',
+  courierId: courier.id
+}));
+
+await db.User.bulkCreate([
+  { username: 'admin', password: 'admin123', role: 'admin', courierId: null },
+  ...courierUsers
+]);
+console.log('✅ Users added (admin + couriers)');
 
     console.log('\n🎉 SEEDING COMPLETED SUCCESSFULLY!');
     console.log('\n📋 Available API endpoints:');

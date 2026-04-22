@@ -8,65 +8,115 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="logo">
-                <span class="logo-icon">🍕</span>
-                <h1>Pizza Delivery</h1>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="logo-center">🍕</div>
+            <h2>Pizza Delivery</h2>
+            <div class="form-group">
+                <input type="text" id="loginUsername" placeholder="Имя пользователя" class="form-input">
             </div>
-            <div class="cart-icon" onclick="toggleCart()">
-                🛒
-                <span class="cart-count" id="cartCount">0</span>
+            <div class="form-group">
+                <input type="password" id="loginPassword" placeholder="Пароль" class="form-input">
             </div>
-        </header>
-
-        <!-- Navigation Tabs -->
-        <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('menu')">🍕 Меню</button>
-            <button class="tab-btn" onclick="showTab('orders')">📋 Мои заказы</button>
-            <button class="tab-btn" onclick="showTab('profile')">👤 Профиль</button>
-        </div>
-
-        <!-- Tab: Menu -->
-        <div id="menuTab" class="tab-content active">
-            <div class="filters">
-                <input type="text" id="searchInput" placeholder="🔍 Поиск пиццы..." onkeyup="filterPizzas()">
-                <label class="filter-checkbox">
-                    <input type="checkbox" id="vegetarianFilter" onchange="filterPizzas()"> 🥬 Только вегетарианские
-                </label>
-            </div>
-            <div id="pizzasGrid" class="pizzas-grid">
-                <div class="loading">Загрузка пицц...</div>
+            <button class="btn-primary" onclick="login()">Войти</button>
+            <div class="login-hint">
+                <p>👑 Админ: admin / admin123</p>
+                <p>🛵 Курьеры: courier_1 / 123456, courier_2 / 123456</p>
             </div>
         </div>
+    </div>
 
-        <!-- Tab: Orders -->
-        <div id="ordersTab" class="tab-content">
-            <div class="orders-header">
-                <h2>История заказов</h2>
-                <button class="refresh-btn" onclick="loadOrders()">🔄 Обновить</button>
-            </div>
-            <div id="ordersList" class="orders-list">
-                <div class="loading">Загрузка заказов...</div>
-            </div>
-        </div>
-
-        <!-- Tab: Profile -->
-        <div id="profileTab" class="tab-content">
-            <div class="profile-card">
-                <h2>👤 Информация о клиенте</h2>
-                <div class="client-selector">
-                    <label>Выберите клиента:</label>
-                    <select id="clientSelect" onchange="loadClientData()">
-                        <option value="">-- Выберите клиента --</option>
-                    </select>
+    <!-- Main App -->
+    <div id="mainApp" style="display: none;">
+        <div class="container">
+            <!-- Header -->
+            <header class="header">
+                <div class="logo">
+                    <span class="logo-icon">🍕</span>
+                    <h1>Pizza Delivery</h1>
                 </div>
-                <div id="clientInfo" class="client-info"></div>
-                <div id="clientAddresses" class="client-addresses"></div>
-                <div class="loyalty">
-                    <span>🎁 Бонусные баллы:</span>
-                    <strong id="loyaltyPoints">0</strong>
+                <div class="user-info">
+                    <span id="userRoleBadge" class="role-badge"></span>
+                    <span id="userName" class="user-name"></span>
+                    <button class="logout-btn" onclick="logout()">🚪 Выйти</button>
+                </div>
+                <div class="cart-icon" onclick="toggleCart()">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </header>
+
+            <!-- Admin Tabs -->
+            <div id="adminTabs" class="tabs">
+                <button class="tab-btn" data-tab="menu">🍕 Меню</button>
+                <button class="tab-btn" data-tab="orders">📋 Заказы</button>
+                <button class="tab-btn" data-tab="clients">👥 Клиенты</button>
+            </div>
+
+            <!-- Courier Tabs -->
+            <div id="courierTabs" class="tabs" style="display: none;">
+                <button class="tab-btn" data-tab="orders">📋 Мои заказы</button>
+            </div>
+
+            <!-- Tab Content: Menu -->
+            <div id="menuTab" class="tab-content">
+                <div class="order-form">
+                    <h3>🍕 Оформление заказа</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>👤 Выберите клиента:</label>
+                            <select id="orderClientSelect" onchange="onOrderClientChange()">
+                                <option value="">-- Выберите клиента --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📍 Адрес доставки:</label>
+                            <select id="orderAddressSelect">
+                                <option value="">-- Сначала выберите клиента --</option>
+                            </select>
+                            <button type="button" class="btn-small" onclick="showAddAddressModal()">+ Добавить новый адрес</button>
+                        </div>
+                        <div class="form-group">
+                            <label>🛵 Курьер:</label>
+                            <select id="orderCourierSelect">
+                                <option value="">-- Выберите курьера --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filters">
+                    <input type="text" id="searchInput" placeholder="🔍 Поиск пиццы..." onkeyup="filterPizzas()">
+                    <label class="filter-checkbox">
+                        <input type="checkbox" id="vegetarianFilter" onchange="filterPizzas()"> 🥬 Только вегетарианские
+                    </label>
+                </div>
+                <div id="pizzasGrid" class="pizzas-grid">
+                    <div class="loading">Загрузка пицц...</div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Orders -->
+            <div id="ordersTab" class="tab-content">
+                <div class="orders-header">
+                    <h2 id="ordersTitle">📋 Все заказы</h2>
+                    <button class="refresh-btn" onclick="loadAllOrders()">🔄 Обновить</button>
+                </div>
+                <div id="ordersList" class="orders-list">
+                    <div class="loading">Загрузка заказов...</div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Clients -->
+            <div id="clientsTab" class="tab-content">
+                <div class="clients-header">
+                    <h2>👥 Управление клиентами</h2>
+                    <button class="refresh-btn" onclick="loadAllClients()">🔄 Обновить</button>
+                    <button class="btn-primary" onclick="showAddClientModal()">+ Добавить клиента</button>
+                </div>
+                <div id="clientsList" class="clients-list">
+                    <div class="loading">Загрузка клиентов...</div>
                 </div>
             </div>
         </div>
@@ -87,6 +137,192 @@
             <div class="cart-actions">
                 <button class="btn-secondary" onclick="toggleCart()">Продолжить покупки</button>
                 <button class="btn-primary" onclick="checkout()">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Client Modal -->
+    <div id="editClientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ Редактировать клиента</h2>
+                <span class="close" onclick="closeEditClientModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editClientId">
+                <div class="form-group">
+                    <label>Имя:</label>
+                    <input type="text" id="editFirstName" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Фамилия:</label>
+                    <input type="text" id="editLastName" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Телефон:</label>
+                    <input type="text" id="editPhone" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="editEmail" class="form-input">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeEditClientModal()">Отмена</button>
+                    <button class="btn-primary" onclick="saveClient()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div id="addClientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>➕ Добавить клиента</h2>
+                <span class="close" onclick="closeAddClientModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Имя:</label>
+                    <input type="text" id="addFirstName" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Фамилия:</label>
+                    <input type="text" id="addLastName" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Телефон:</label>
+                    <input type="text" id="addPhone" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="addEmail" class="form-input">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeAddClientModal()">Отмена</button>
+                    <button class="btn-primary" onclick="addClient()">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Addresses Modal -->
+    <div id="addressesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📍 Адреса клиента</h2>
+                <span class="close" onclick="closeAddressesModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="addressesList" class="addresses-list"></div>
+                <div class="add-address-form">
+                    <h4>➕ Добавить адрес</h4>
+                    <input type="hidden" id="newAddressClientId">
+                    <div class="form-group">
+                        <label>Улица:</label>
+                        <input type="text" id="newStreet" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Дом:</label>
+                        <input type="text" id="newHouse" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Квартира:</label>
+                        <input type="text" id="newApartment" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Подъезд:</label>
+                        <input type="text" id="newEntrance" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Этаж:</label>
+                        <input type="text" id="newFloor" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Комментарий:</label>
+                        <textarea id="newComment" class="form-input" rows="2"></textarea>
+                    </div>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="newIsMain"> Основной адрес
+                    </label>
+                    <button class="btn-primary" onclick="addAddress()">Добавить адрес</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Order Modal -->
+    <div id="editOrderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ Редактировать заказ</h2>
+                <span class="close" onclick="closeEditOrderModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editOrderId">
+                <div class="form-group">
+                    <label>Статус заказа:</label>
+                    <select id="editOrderStatus" class="form-input">
+                        <option value="new">🆕 Новый</option>
+                        <option value="cooking">🍳 Готовится</option>
+                        <option value="delivering">🚚 В доставке</option>
+                        <option value="delivered">✅ Доставлен</option>
+                        <option value="cancelled">❌ Отменён</option>
+                    </select>
+                </div>
+                <div id="courierSelectGroup" class="form-group">
+                    <label>Курьер:</label>
+                    <select id="editOrderCourier" class="form-input">
+                        <option value="">-- Выберите курьера --</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeEditOrderModal()">Отмена</button>
+                    <button class="btn-primary" onclick="saveOrder()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Address During Order Modal -->
+    <div id="addAddressDuringOrderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📍 Добавить новый адрес</h2>
+                <span class="close" onclick="closeAddAddressDuringOrderModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Улица:</label>
+                    <input type="text" id="orderNewStreet" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Дом:</label>
+                    <input type="text" id="orderNewHouse" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Квартира:</label>
+                    <input type="text" id="orderNewApartment" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Подъезд:</label>
+                    <input type="text" id="orderNewEntrance" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Этаж:</label>
+                    <input type="text" id="orderNewFloor" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Комментарий:</label>
+                    <textarea id="orderNewComment" class="form-input" rows="2"></textarea>
+                </div>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="orderNewIsMain"> Основной адрес
+                </label>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeAddAddressDuringOrderModal()">Отмена</button>
+                    <button class="btn-primary" onclick="addAddressDuringOrder()">Добавить</button>
+                </div>
             </div>
         </div>
     </div>

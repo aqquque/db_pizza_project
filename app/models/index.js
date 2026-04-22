@@ -31,6 +31,7 @@ db.Address = require("./address.model.js")(sequelize, Sequelize);
 db.Courier = require("./courier.model.js")(sequelize, Sequelize);
 db.Order = require("./order.model.js")(sequelize, Sequelize);
 db.OrderItem = require("./orderitem.model.js")(sequelize, Sequelize);
+db.User = require("./user.model.js")(sequelize, Sequelize);
 
 // Связи
 require("./references.model.js")(db);

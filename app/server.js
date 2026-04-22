@@ -52,6 +52,7 @@ require("./routes/client.routes")(app);
 require("./routes/address.routes")(app);
 require("./routes/courier.routes")(app);
 require("./routes/order.routes")(app);
+require("./routes/auth.routes")(app);
 
 // Fallback для SPA (если маршрут не найден, отдаём index.html)
 app.get('*', (req, res) => {
